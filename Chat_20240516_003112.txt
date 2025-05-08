@@ -1,0 +1,25 @@
+buscando credenciales...
+buscando amigos del userID: 1... se encontraron amigos, retornando la lista!
+buscando amigos del userID: 1... se encontraron amigos, retornando la lista!
+buscando amigos del userID: 1... se encontraron amigos, retornando la lista!
+buscando amigos del userID: 1... se encontraron amigos, retornando la lista!
+buscando usuarios que tengan el status conexion como (1) que no sean el usuario id (1)... retornando la lista
+buscando usuarios que tengan el status conexion como (0) que no sean el usuario id (1)... retornando la lista
+buscando usuarios que tengan el status conexion como (1) que no sean el usuario id (1)... retornando la lista
+buscando usuarios que tengan el status conexion como (0) que no sean el usuario id (1)... retornando la lista
+buscando usuarios que tengan el status conexion como (1) que no sean el usuario id (1)... retornando la lista
+buscando usuarios que tengan el status conexion como (0) que no sean el usuario id (1)... retornando la lista
+buscando usuarios que tengan el status conexion como (1) que no sean el usuario id (1)... retornando la lista
+buscando usuarios que tengan el status conexion como (0) que no sean el usuario id (1)... retornando la lista
+Buscando nombre del usuario 1... y se encontro
+Buscando grupos del usuario 1... y se encontraron
+Usuario:  Drake Bucando usuarioId por nombre de usuario...
+Usuario:  AxelWhite Bucando usuarioId por nombre de usuario...
+Usuario: 1 Creando nuevo grupo...
+Usuario: 4 Recibiendo solicitud de grupo...
+Usuario: 2 Recibiendo solicitud de grupo...
+Buscando nombre del usuario 1... y se encontro
+Buscando grupos del usuario 1... y se encontraron
+Buscando el nombre del grupo 1... y se encontro
+Buscando nombre del usuario 1... y se encontro
+Buscando grupos del usuario 1... y se encontraron
