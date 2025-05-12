@@ -171,7 +171,7 @@ public class Server {
                         case 2:
                             try {
                                 int userIdQuery = Integer.parseInt(parts[1]);
-                                // System.out.println("userId del que buscamos amigos:  "+userIdQuery);
+                                System.out.println("userId del que buscamos amigos:  "+userIdQuery);
                                 ArrayList<Amigos> amigos = queries.selectMisAmigosUsuarios(userIdQuery);
                                 StringBuilder messageAmigos = new StringBuilder();
                                 if (amigos.isEmpty()) {
@@ -180,7 +180,8 @@ public class Server {
                                 
                                 } else {
                                     for (Amigos a : amigos) {
-                                        messageAmigos.append(a.usuarioId + ":" + a.nombreUsuario + ":" + a.amigosId + ":" + a.conexion + "_");
+                                        System.out.println(a);
+                                        messageAmigos.append(a.amigosId + ":" + a.usuarioId + ":" + a.nombreUsuario + ":" + a.conexion + "_");
                                     }
                                     GUI.SendToServerLog("buscando amigos del userID: "+userIdQuery+"... se encontraron amigos, retornando la lista!");
                                 }
@@ -254,19 +255,19 @@ public class Server {
                             break;
                         case 7:
                             String user = parts[1];
-                            String pregunta = parts[2];
+                            String pass = parts[2];
                             
                             System.out.println(user);
-                            System.out.println(pregunta);
+                            System.out.println(pass);
                             
-                            String busqueda = queries.BuscarPregunta(user, pregunta);
+                            String busqueda = queries.BuscarContrasena(user, pass);
                             if (!busqueda.equals("0")) {
                                 out.writeBytes(busqueda); 
                             } else {
                                 out.writeBytes("0"); 
                             }
                             break;
-                            case 8:
+                        case 8:
                             String userPassId = parts[1];
                             String contraseña = queries.VerContraseña(userPassId);
                             System.out.println(userPassId);

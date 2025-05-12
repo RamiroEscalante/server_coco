@@ -97,7 +97,7 @@ public class Queries {
         ResultSet res;
         int chatId = -1;
         try {
-            sql = bd.getCon().prepareStatement("SELECT ConversacionId FROM chats WHERE (Usuario1Id = ? AND Usuario2Id= ?) OR (Usuario1Id = ? AND Usuario2Id= ?)");
+            sql = bd.getCon().prepareStatement("SELECT chat_id FROM chats WHERE (Usuario1Id = ? AND Usuario2Id= ?) OR (Usuario1Id = ? AND Usuario2Id= ?)");
             sql.setInt(1, chatterId1);
             sql.setInt(2, chatterId2);
             sql.setInt(3, chatterId2);
@@ -105,7 +105,7 @@ public class Queries {
             res = sql.executeQuery();
             
             if (res.next()) {
-                chatId = res.getInt("ConversacionId");
+                chatId = res.getInt("chat_id");
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
@@ -197,7 +197,7 @@ public class Queries {
         ResultSet r;
         try
         {
-            sql = bd.getCon().prepareStatement("SELECT u.NombreUsuario, a.UsuarioId, a.amigosId, u.StatusConexion FROM usuarios u INNER JOIN listaamigos a ON u.UsuarioId=a.UsuarioId WHERE a.UsuarioDuenoId=?");
+            sql = bd.getCon().prepareStatement("SELECT a.id_relacion , u.NombreUsuario, a.UsuarioId, u.StatusConexion FROM usuarios u INNER JOIN listaamigos a ON u.UsuarioId=a.UsuarioId WHERE a.UsuarioDuenoId=?");
             
             sql.setInt(1,usuarioId);
             
@@ -205,9 +205,10 @@ public class Queries {
             while(r.next())
             {
                 Amigos x = new Amigos();
+                x.amigosId = r.getInt("id_relacion");
+                System.out.println("aquiiiii" + x.amigosId);
                 x.nombreUsuario = r.getString("NombreUsuario");
                 x.usuarioId = r.getInt("UsuarioId");
-                x.amigosId = r.getInt("amigosId");
                 x.conexion = r.getInt("StatusConexion");
                 amigos.add(x);
             }
@@ -229,7 +230,7 @@ public class Queries {
         ResultSet r;
         try
         {
-            sql = bd.getCon().prepareStatement("SELECT u.NombreUsuario, a.UsuarioDuenoId, a.amigosId, u.StatusConexion FROM usuarios u INNER JOIN listaamigos a ON u.UsuarioId=a.UsuarioDuenoId WHERE a.UsuarioId=?");
+            sql = bd.getCon().prepareStatement("SELECT u.NombreUsuario, a.UsuarioDuenoId, u.StatusConexion FROM usuarios u INNER JOIN listaamigos a ON u.UsuarioId=a.UsuarioDuenoId WHERE a.UsuarioId=?");
             
             sql.setInt(1,usuarioId);
             r = sql.executeQuery();
@@ -238,7 +239,6 @@ public class Queries {
                 Amigos x = new Amigos();
                 x.nombreUsuario = r.getString("NombreUsuario");
                 x.usuarioId = r.getInt("UsuarioDuenoId");
-                x.amigosId = r.getInt("amigosId");
                 x.conexion = r.getInt("StatusConexion");
                 amigos.add(x);
             }
@@ -258,7 +258,7 @@ public class Queries {
         PreparedStatement sql;
         boolean res = false;
         try {
-            sql = bd.getCon().prepareStatement("DELETE FROM listaamigos WHERE amigosId = ?");
+            sql = bd.getCon().prepareStatement("DELETE FROM listaamigos WHERE id_relacion = ?");
             sql.setInt(1, amigosId); // Suponiendo que userId es el ID del usuario actual
             int comprobar = sql.executeUpdate();
             if (comprobar > 0) {
@@ -280,12 +280,11 @@ public class Queries {
         
         BD bd = new BD();
         try {
-            String sql = "INSERT INTO usuarios (NombreUsuario, Pass, RespuestaPreguntaConfianza,StatusConexion)VALUES (?,?,?,?)";
+            String sql = "INSERT INTO usuarios (NombreUsuario, Pass,StatusConexion)VALUES (?,?,?)";
             pstmt = bd.getCon().prepareStatement(sql);
             pstmt.setString(1, Nombre);
             pstmt.setString(2, pass);
-            pstmt.setString(3, res);
-            pstmt.setInt(4,0 );
+            pstmt.setInt(3,0 );
            
             int comprobar = pstmt.executeUpdate();
             bd.closeConnection();
@@ -336,18 +335,18 @@ public class Queries {
         
         
     }
-    public String BuscarPregunta(String usuarioId, String psw) throws SQLException {
-        PreparedStatement pstmt = null;
+    public String BuscarContrasena(String usuarioId, String psw) throws SQLException {
+        PreparedStatement pstmt;
         ResultSet rs = null;
         BD bd = new BD();
         try {
-            String sql = "SELECT * FROM usuarios WHERE NombreUsuario = ? AND RespuestaPreguntaConfianza = ?";
+            String sql = "SELECT * FROM usuarios WHERE NombreUsuario = ? AND pass = ?";
             pstmt = bd.getCon().prepareStatement(sql);
             pstmt.setString(1, usuarioId);
             pstmt.setString(2, psw);
             rs = pstmt.executeQuery();
             if (rs.next()) {
-                System.out.println("Credenciales válidas");
+                System.out.println("edenciales válidas");
             } else {
                 System.out.println("Credenciales no válidas");
                 bd.closeConnection();
@@ -356,11 +355,14 @@ public class Queries {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        
         int usuarioID = rs.getInt("UsuarioId");
         String userID = "0";
         userID = String.valueOf(usuarioID);
         bd.closeConnection();
+        
         System.out.println(userID);
+        
         return userID;
     }
  // FIN DE QUERIES DE AMIGOS ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -742,14 +744,14 @@ public class Queries {
         IndividualChatModel chat;
         
         try {
-            sql = bd.getCon().prepareStatement("SELECT ConversacionId, Usuario1Id, Usuario2Id FROM chats WHERE (Usuario1Id = ?) OR (Usuario2Id= ?)");
+            sql = bd.getCon().prepareStatement("SELECT chat_id, Usuario1Id, Usuario2Id FROM chats WHERE (Usuario1Id = ?) OR (Usuario2Id= ?)");
             sql.setInt(1, chatterId);
             sql.setInt(2, chatterId);
             res = sql.executeQuery();
             
             while (res.next()) {
                 chat = new IndividualChatModel();
-                chat.setChatId(res.getInt("ConversacionId"));
+                chat.setChatId(res.getInt("chat_id"));
                 chat.setChatterId1(res.getInt("Usuario1Id"));
                 chat.setChatterId2(res.getInt("Usuario2Id"));
                 chatsEncontrados.add(chat);
@@ -788,7 +790,7 @@ public class Queries {
         
         try
         {
-            sql = bd.getCon().prepareStatement("SELECT amigosId FROM listaamigos WHERE (UsuarioDuenoId = ? AND UsuarioId = ?) OR (UsuarioDuenoId = ? AND UsuarioId = ?)");
+            sql = bd.getCon().prepareStatement("SELECT id_relacion FROM listaamigos WHERE (UsuarioDuenoId = ? AND UsuarioId = ?) OR (UsuarioDuenoId = ? AND UsuarioId = ?)");
             sql.setInt(1, usuarioId1);
             sql.setInt(2, usuarioId2);
             sql.setInt(3, usuarioId2);
